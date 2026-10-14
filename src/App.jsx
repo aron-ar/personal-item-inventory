@@ -1,13 +1,17 @@
 import { useState } from 'react'
+import ItemDetail from './components/ItemDetail.jsx'
 import ItemForm from './components/ItemForm.jsx'
 import ItemList from './components/ItemList.jsx'
 import { useInventory } from './hooks/useInventory.js'
 
 function App() {
-  const { items, addItem, updateItem, deleteItem } = useInventory()
+  const { items, addItem, updateItem, deleteItem, getItemById } = useInventory()
   const [isItemFormOpen, setIsItemFormOpen] = useState(false)
   const [editingItemId, setEditingItemId] = useState(null)
+  const [viewingItemId, setViewingItemId] = useState(null)
   const editingItem = items.find((item) => item.id === editingItemId) ?? null
+  const viewedItem =
+    viewingItemId === null ? null : getItemById(viewingItemId)
   const summaryCards = [
     {
       label: 'Items tracked',
@@ -44,12 +48,22 @@ function App() {
       return
     }
 
-    if (deleteItem(item.id) && editingItemId === item.id) {
-      setEditingItemId(null)
+    if (deleteItem(item.id)) {
+      if (editingItemId === item.id) {
+        setEditingItemId(null)
+      }
+
+      if (viewingItemId === item.id) {
+        setViewingItemId(null)
+      }
     }
   }
 
   function handleToggleItemForm() {
+    if (viewingItemId !== null) {
+      setViewingItemId(null)
+    }
+
     if (editingItem !== null) {
       setEditingItemId(null)
       setIsItemFormOpen(true)
@@ -118,30 +132,52 @@ function App() {
             </button>
           </div>
 
-          <div className="toolbar-shell">
-            <span className="toolbar-dot" aria-hidden="true" />
-            <p>Add the things you own to keep your collection up to date.</p>
-          </div>
-
-          {(isItemFormOpen || editingItem !== null) && (
-            <div id="item-form">
-              <ItemForm
-                key={editingItem?.id ?? 'new-item'}
-                item={editingItem}
-                onItemSaved={handleSaveItem}
-                onCancel={() => setEditingItemId(null)}
-              />
+          {viewingItemId === null && (
+            <div className="toolbar-shell">
+              <span className="toolbar-dot" aria-hidden="true" />
+              <p>Add the things you own to keep your collection up to date.</p>
             </div>
           )}
 
-          <ItemList
-            items={items}
-            onEditItem={(id) => {
-              setEditingItemId(id)
-              setIsItemFormOpen(false)
-            }}
-            onDeleteItem={handleDeleteItem}
-          />
+          {viewingItemId === null &&
+            (isItemFormOpen || editingItem !== null) && (
+              <div id="item-form">
+                <ItemForm
+                  key={editingItem?.id ?? 'new-item'}
+                  item={editingItem}
+                  onItemSaved={handleSaveItem}
+                  onCancel={() => setEditingItemId(null)}
+                />
+              </div>
+            )}
+
+          {viewingItemId !== null ? (
+            <ItemDetail
+              item={viewedItem}
+              itemId={viewingItemId}
+              onBack={() => setViewingItemId(null)}
+              onEdit={() => {
+                setEditingItemId(viewingItemId)
+                setIsItemFormOpen(false)
+                setViewingItemId(null)
+              }}
+              onDelete={() => {
+                if (viewedItem !== null) {
+                  handleDeleteItem(viewedItem)
+                }
+              }}
+            />
+          ) : (
+            <ItemList
+              items={items}
+              onViewItem={setViewingItemId}
+              onEditItem={(id) => {
+                setEditingItemId(id)
+                setIsItemFormOpen(false)
+              }}
+              onDeleteItem={handleDeleteItem}
+            />
+          )}
         </section>
       </main>
 

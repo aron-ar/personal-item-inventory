@@ -1,10 +1,18 @@
-function ItemCard({ item, onEdit, onDelete }) {
+function ItemCard({ item, onView, onEdit, onDelete }) {
   return (
     <article className="item-card">
       <div className="item-card-heading">
         <h3>{item.name}</h3>
         <div className="item-card-actions">
           <span className="item-category">{item.category}</span>
+          <button
+            className="item-view-button"
+            type="button"
+            aria-label={`View details for ${item.name}`}
+            onClick={onView}
+          >
+            View detail
+          </button>
           <button
             className="item-edit-button"
             type="button"

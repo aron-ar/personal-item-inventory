@@ -236,6 +236,7 @@ a {
 .item-form-submit:focus-visible,
 .item-form-cancel:focus-visible,
 .item-edit-button:focus-visible,
+.item-view-button:focus-visible,
 .item-delete-button:focus-visible,
 .item-form input:focus-visible,
 .item-form select:focus-visible {
@@ -500,6 +501,21 @@ a {
   font-weight: 600;
 }
 
+.item-view-button {
+  padding: 3px 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-green);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.item-view-button:hover {
+  color: #365744;
+  text-decoration: underline;
+}
+
 .item-edit-button:hover {
   color: #365744;
   text-decoration: underline;
@@ -552,6 +568,87 @@ a {
   color: #526057;
   font-size: 12px;
   font-weight: 500;
+}
+
+.item-detail,
+.item-detail-not-found {
+  padding: 24px 26px 26px;
+}
+
+.detail-back-button {
+  cursor: pointer;
+}
+
+.item-detail-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f1ee;
+}
+
+.item-detail-heading .eyebrow {
+  margin-bottom: 6px;
+}
+
+.item-detail-heading h3,
+.item-detail-not-found h3 {
+  overflow-wrap: anywhere;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.item-detail-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin: 22px 0 0;
+}
+
+.item-detail-fields div {
+  min-width: 0;
+}
+
+.item-detail-fields dt {
+  color: #929b94;
+  font-size: 11px;
+}
+
+.item-detail-fields dd {
+  overflow-wrap: anywhere;
+  margin: 6px 0 0;
+  color: #526057;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.item-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid #f0f1ee;
+}
+
+.item-detail-actions .item-delete-button {
+  padding: 9px 0;
+}
+
+.item-detail-not-found h3 {
+  margin-top: 24px;
+}
+
+.item-detail-not-found p {
+  margin: 8px 0 20px;
+  color: #8a938d;
+  font-size: 12px;
+  line-height: 1.7;
 }
 
 .site-footer {
@@ -660,6 +757,16 @@ a {
     grid-template-columns: 1fr;
     gap: 10px;
     padding: 17px 19px 20px;
+  }
+
+  .item-detail,
+  .item-detail-not-found {
+    padding: 19px;
+  }
+
+  .item-detail-fields {
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
 
   .site-footer {

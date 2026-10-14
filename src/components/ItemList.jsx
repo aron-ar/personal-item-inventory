@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import ItemCard from './ItemCard.jsx'
 
-function ItemList({ items, onEditItem, onDeleteItem }) {
+function ItemList({ items, onViewItem, onEditItem, onDeleteItem }) {
   const [searchQuery, setSearchQuery] = useState('')
   const normalizedQuery = searchQuery.trim().toLowerCase()
   const matchingItems = items.filter((item) =>
@@ -43,6 +43,7 @@ function ItemList({ items, onEditItem, onDeleteItem }) {
             <ItemCard
               item={item}
               key={item.id}
+              onView={() => onViewItem(item.id)}
               onEdit={() => onEditItem(item.id)}
               onDelete={() => onDeleteItem(item)}
             />
