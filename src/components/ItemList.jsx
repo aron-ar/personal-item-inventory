@@ -1,6 +1,6 @@
 import ItemCard from './ItemCard.jsx'
 
-function ItemList({ items, onEditItem }) {
+function ItemList({ items, onEditItem, onDeleteItem }) {
   if (items.length === 0) {
     return (
       <div className="empty-state">
@@ -27,6 +27,7 @@ function ItemList({ items, onEditItem }) {
           item={item}
           key={item.id}
           onEdit={() => onEditItem(item.id)}
+          onDelete={() => onDeleteItem(item)}
         />
       ))}
     </div>

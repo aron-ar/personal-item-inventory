@@ -1,4 +1,4 @@
-function ItemCard({ item, onEdit }) {
+function ItemCard({ item, onEdit, onDelete }) {
   return (
     <article className="item-card">
       <div className="item-card-heading">
@@ -12,6 +12,14 @@ function ItemCard({ item, onEdit }) {
             onClick={onEdit}
           >
             Edit
+          </button>
+          <button
+            className="item-delete-button"
+            type="button"
+            aria-label={`Delete ${item.name}`}
+            onClick={onDelete}
+          >
+            Delete
           </button>
         </div>
       </div>

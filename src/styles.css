@@ -236,6 +236,7 @@ a {
 .item-form-submit:focus-visible,
 .item-form-cancel:focus-visible,
 .item-edit-button:focus-visible,
+.item-delete-button:focus-visible,
 .item-form input:focus-visible,
 .item-form select:focus-visible {
   outline: 2px solid #82a48a;
@@ -422,6 +423,21 @@ a {
 
 .item-edit-button:hover {
   color: #365744;
+  text-decoration: underline;
+}
+
+.item-delete-button {
+  padding: 3px 0;
+  border: 0;
+  background: transparent;
+  color: #a45148;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.item-delete-button:hover {
+  color: #813a33;
   text-decoration: underline;
 }
 

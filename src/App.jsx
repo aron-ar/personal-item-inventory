@@ -4,7 +4,7 @@ import ItemList from './components/ItemList.jsx'
 import { useInventory } from './hooks/useInventory.js'
 
 function App() {
-  const { items, addItem, updateItem } = useInventory()
+  const { items, addItem, updateItem, deleteItem } = useInventory()
   const [isItemFormOpen, setIsItemFormOpen] = useState(false)
   const [editingItemId, setEditingItemId] = useState(null)
   const editingItem = items.find((item) => item.id === editingItemId) ?? null
@@ -35,6 +35,18 @@ function App() {
     }
 
     addItem(fields)
+  }
+
+  function handleDeleteItem(item) {
+    const confirmed = window.confirm(`Delete "${item.name}" from your inventory?`)
+
+    if (!confirmed) {
+      return
+    }
+
+    if (deleteItem(item.id) && editingItemId === item.id) {
+      setEditingItemId(null)
+    }
   }
 
   function handleToggleItemForm() {
@@ -128,6 +140,7 @@ function App() {
               setEditingItemId(id)
               setIsItemFormOpen(false)
             }}
+            onDeleteItem={handleDeleteItem}
           />
         </section>
       </main>
