@@ -31,8 +31,17 @@ function validateFields(fields) {
   return errors
 }
 
-function ItemForm({ onItemAdded }) {
-  const [fields, setFields] = useState(INITIAL_FIELDS)
+function ItemForm({ item = null, onItemSaved, onCancel }) {
+  const [fields, setFields] = useState(() =>
+    item
+      ? {
+          name: item.name,
+          category: item.category,
+          location: item.location,
+          quantity: String(item.quantity),
+        }
+      : INITIAL_FIELDS,
+  )
   const [errors, setErrors] = useState({})
   const [saveError, setSaveError] = useState('')
 
@@ -55,13 +64,15 @@ function ItemForm({ onItemAdded }) {
     }
 
     try {
-      onItemAdded({
+      onItemSaved({
         ...fields,
         name: fields.name.trim(),
         location: fields.location.trim(),
         quantity: Number(fields.quantity),
       })
-      setFields(INITIAL_FIELDS)
+      if (item === null) {
+        setFields(INITIAL_FIELDS)
+      }
       setErrors({})
     } catch (error) {
       setSaveError(
@@ -173,8 +184,17 @@ function ItemForm({ onItemAdded }) {
       )}
 
       <div className="item-form-actions">
+        {item !== null && (
+          <button
+            className="item-form-cancel"
+            type="button"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+        )}
         <button className="item-form-submit" type="submit">
-          Save item
+          {item === null ? 'Save item' : 'Save changes'}
         </button>
       </div>
     </form>

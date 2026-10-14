@@ -4,8 +4,10 @@ import ItemList from './components/ItemList.jsx'
 import { useInventory } from './hooks/useInventory.js'
 
 function App() {
-  const { items, addItem } = useInventory()
+  const { items, addItem, updateItem } = useInventory()
   const [isItemFormOpen, setIsItemFormOpen] = useState(false)
+  const [editingItemId, setEditingItemId] = useState(null)
+  const editingItem = items.find((item) => item.id === editingItemId) ?? null
   const summaryCards = [
     {
       label: 'Items tracked',
@@ -19,6 +21,31 @@ function App() {
       value: '—',
     },
   ]
+
+  function handleSaveItem(fields) {
+    if (editingItemId !== null) {
+      const updatedItem = updateItem(editingItemId, fields)
+
+      if (updatedItem === null) {
+        throw new Error('The item could not be found.')
+      }
+
+      setEditingItemId(null)
+      return
+    }
+
+    addItem(fields)
+  }
+
+  function handleToggleItemForm() {
+    if (editingItem !== null) {
+      setEditingItemId(null)
+      setIsItemFormOpen(true)
+      return
+    }
+
+    setIsItemFormOpen((isOpen) => !isOpen)
+  }
 
   return (
     <div className="app-shell">
@@ -67,11 +94,15 @@ function App() {
             <button
               className="add-item-button"
               type="button"
-              aria-expanded={isItemFormOpen}
-              aria-controls="add-item-form"
-              onClick={() => setIsItemFormOpen((isOpen) => !isOpen)}
+              aria-expanded={isItemFormOpen || editingItem !== null}
+              aria-controls="item-form"
+              onClick={handleToggleItemForm}
             >
-              {isItemFormOpen ? 'Close form' : 'Add item'}
+              {editingItem !== null
+                ? 'Add item instead'
+                : isItemFormOpen
+                  ? 'Close form'
+                  : 'Add item'}
             </button>
           </div>
 
@@ -80,13 +111,24 @@ function App() {
             <p>Add the things you own to keep your collection up to date.</p>
           </div>
 
-          {isItemFormOpen && (
-            <div id="add-item-form">
-              <ItemForm onItemAdded={addItem} />
+          {(isItemFormOpen || editingItem !== null) && (
+            <div id="item-form">
+              <ItemForm
+                key={editingItem?.id ?? 'new-item'}
+                item={editingItem}
+                onItemSaved={handleSaveItem}
+                onCancel={() => setEditingItemId(null)}
+              />
             </div>
           )}
 
-          <ItemList items={items} />
+          <ItemList
+            items={items}
+            onEditItem={(id) => {
+              setEditingItemId(id)
+              setIsItemFormOpen(false)
+            }}
+          />
         </section>
       </main>
 

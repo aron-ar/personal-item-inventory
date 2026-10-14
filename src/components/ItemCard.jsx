@@ -1,9 +1,19 @@
-function ItemCard({ item }) {
+function ItemCard({ item, onEdit }) {
   return (
     <article className="item-card">
       <div className="item-card-heading">
         <h3>{item.name}</h3>
-        <span className="item-category">{item.category}</span>
+        <div className="item-card-actions">
+          <span className="item-category">{item.category}</span>
+          <button
+            className="item-edit-button"
+            type="button"
+            aria-label={`Edit ${item.name}`}
+            onClick={onEdit}
+          >
+            Edit
+          </button>
+        </div>
       </div>
       <dl className="item-details">
         <div>

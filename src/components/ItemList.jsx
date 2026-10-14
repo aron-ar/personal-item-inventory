@@ -1,6 +1,6 @@
 import ItemCard from './ItemCard.jsx'
 
-function ItemList({ items }) {
+function ItemList({ items, onEditItem }) {
   if (items.length === 0) {
     return (
       <div className="empty-state">
@@ -23,7 +23,11 @@ function ItemList({ items }) {
   return (
     <div className="item-list" aria-label="Inventory items">
       {items.map((item) => (
-        <ItemCard item={item} key={item.id} />
+        <ItemCard
+          item={item}
+          key={item.id}
+          onEdit={() => onEditItem(item.id)}
+        />
       ))}
     </div>
   )
