@@ -1,8 +1,11 @@
+import { useState } from 'react'
+import ItemForm from './components/ItemForm.jsx'
 import ItemList from './components/ItemList.jsx'
 import { useInventory } from './hooks/useInventory.js'
 
 function App() {
-  const { items } = useInventory()
+  const { items, addItem } = useInventory()
+  const [isItemFormOpen, setIsItemFormOpen] = useState(false)
   const summaryCards = [
     {
       label: 'Items tracked',
@@ -61,13 +64,27 @@ function App() {
               <p className="eyebrow">YOUR COLLECTION</p>
               <h2 id="inventory-title">Inventory</h2>
             </div>
-            <span className="coming-soon">Getting started</span>
+            <button
+              className="add-item-button"
+              type="button"
+              aria-expanded={isItemFormOpen}
+              aria-controls="add-item-form"
+              onClick={() => setIsItemFormOpen((isOpen) => !isOpen)}
+            >
+              {isItemFormOpen ? 'Close form' : 'Add item'}
+            </button>
           </div>
 
-          <div className="toolbar-shell" role="toolbar" aria-label="Inventory tools">
+          <div className="toolbar-shell">
             <span className="toolbar-dot" aria-hidden="true" />
-            <p>Tools for organizing your inventory will appear here.</p>
+            <p>Add the things you own to keep your collection up to date.</p>
           </div>
+
+          {isItemFormOpen && (
+            <div id="add-item-form">
+              <ItemForm onItemAdded={addItem} />
+            </div>
+          )}
 
           <ItemList items={items} />
         </section>
