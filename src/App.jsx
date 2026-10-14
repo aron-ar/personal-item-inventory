@@ -1,10 +1,22 @@
-const summaryCards = [
-  { label: 'Items tracked', detail: 'Your personal collection' },
-  { label: 'Categories', detail: 'A little order, at a glance' },
-  { label: 'Recently updated', detail: 'Your latest changes' },
-]
+import ItemList from './components/ItemList.jsx'
+import { useInventory } from './hooks/useInventory.js'
 
 function App() {
+  const { items } = useInventory()
+  const summaryCards = [
+    {
+      label: 'Items tracked',
+      detail: 'Your personal collection',
+      value: items.length,
+    },
+    { label: 'Categories', detail: 'A little order, at a glance', value: '—' },
+    {
+      label: 'Recently updated',
+      detail: 'Your latest changes',
+      value: '—',
+    },
+  ]
+
   return (
     <div className="app-shell">
       <header className="site-header">
@@ -37,7 +49,7 @@ function App() {
           {summaryCards.map((card) => (
             <article className="summary-card" key={card.label}>
               <p className="summary-label">{card.label}</p>
-              <p className="summary-value" aria-label="Not available yet">—</p>
+              <p className="summary-value">{card.value}</p>
               <p className="summary-detail">{card.detail}</p>
             </article>
           ))}
@@ -57,20 +69,7 @@ function App() {
             <p>Tools for organizing your inventory will appear here.</p>
           </div>
 
-          <div className="empty-state">
-            <div className="empty-illustration" aria-hidden="true">
-              <svg viewBox="0 0 80 80" fill="none">
-                <path d="m14 28 26-14 26 14v28L40 70 14 56V28Z" />
-                <path d="m15 28 25 14 25-14M40 42v27M27 21l26 15" />
-                <path d="M31 49h18" />
-              </svg>
-            </div>
-            <h3>Your inventory starts here</h3>
-            <p>
-              This is your space for the things you own. Your collection will
-              take shape here as inventory features become available.
-            </p>
-          </div>
+          <ItemList items={items} />
         </section>
       </main>
 
