@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ItemDetail from './components/ItemDetail.jsx'
 import ItemForm from './components/ItemForm.jsx'
 import ItemList from './components/ItemList.jsx'
@@ -9,6 +9,7 @@ function App() {
   const [isItemFormOpen, setIsItemFormOpen] = useState(false)
   const [editingItemId, setEditingItemId] = useState(null)
   const [viewingItemId, setViewingItemId] = useState(null)
+  const [feedback, setFeedback] = useState(null)
   const editingItem = items.find((item) => item.id === editingItemId) ?? null
   const viewedItem =
     viewingItemId === null ? null : getItemById(viewingItemId)
@@ -26,6 +27,19 @@ function App() {
     },
   ]
 
+  useEffect(() => {
+    if (feedback === null) {
+      return undefined
+    }
+
+    const timeoutId = window.setTimeout(() => setFeedback(null), 3000)
+    return () => window.clearTimeout(timeoutId)
+  }, [feedback])
+
+  function showFeedback(message) {
+    setFeedback({ message })
+  }
+
   function handleSaveItem(fields) {
     if (editingItemId !== null) {
       const updatedItem = updateItem(editingItemId, fields)
@@ -35,10 +49,12 @@ function App() {
       }
 
       setEditingItemId(null)
+      showFeedback('Item updated successfully')
       return
     }
 
     addItem(fields)
+    showFeedback('Item created successfully')
   }
 
   function handleDeleteItem(item) {
@@ -56,6 +72,8 @@ function App() {
       if (viewingItemId === item.id) {
         setViewingItemId(null)
       }
+
+      showFeedback('Item deleted successfully')
     }
   }
 
@@ -90,6 +108,19 @@ function App() {
           Personal workspace
         </div>
       </header>
+
+      {feedback !== null && (
+        <div className="feedback-message" role="status" aria-live="polite">
+          <span>{feedback.message}</span>
+          <button
+            type="button"
+            aria-label="Dismiss message"
+            onClick={() => setFeedback(null)}
+          >
+            ×
+          </button>
+        </div>
+      )}
 
       <main className="page-content">
         <section className="intro" aria-labelledby="page-title">

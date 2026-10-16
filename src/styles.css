@@ -674,6 +674,41 @@ a {
   color: #a5b1a7;
 }
 
+.feedback-message {
+  position: fixed;
+  z-index: 10;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  width: max-content;
+  max-width: calc(100vw - 40px);
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 14px;
+  border: 1px solid #dce8dd;
+  border-radius: 8px;
+  background: #f1f5f0;
+  box-shadow: 0 8px 24px rgb(35 51 45 / 12%);
+  color: #365744;
+  font-size: 12px;
+}
+
+.feedback-message button {
+  padding: 0 2px;
+  border: 0;
+  background: transparent;
+  color: #66806d;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.feedback-message button:focus-visible {
+  outline: 2px solid #82a48a;
+  outline-offset: 2px;
+}
+
 @media (max-width: 640px) {
   .site-header {
     height: 66px;
