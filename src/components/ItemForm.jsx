@@ -85,6 +85,9 @@ function ItemForm({ item = null, onItemSaved, onCancel }) {
 
   return (
     <form className="item-form" onSubmit={handleSubmit} noValidate>
+      <h3 className="item-form-heading">
+        {item === null ? 'Add an item' : `Edit ${item.name}`}
+      </h3>
       <div className="item-form-fields">
         <div className="form-field">
           <label htmlFor="item-name">Name</label>
@@ -184,15 +187,13 @@ function ItemForm({ item = null, onItemSaved, onCancel }) {
       )}
 
       <div className="item-form-actions">
-        {item !== null && (
-          <button
-            className="item-form-cancel"
-            type="button"
-            onClick={onCancel}
-          >
-            Cancel
-          </button>
-        )}
+        <button
+          className="item-form-cancel"
+          type="button"
+          onClick={onCancel}
+        >
+          Cancel
+        </button>
         <button className="item-form-submit" type="submit">
           {item === null ? 'Save item' : 'Save changes'}
         </button>

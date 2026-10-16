@@ -267,6 +267,14 @@ a {
   background: #fafbf9;
 }
 
+.item-form-heading {
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+}
+
 .item-form-fields {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -313,7 +321,7 @@ a {
 .item-form-actions {
   display: flex;
   gap: 8px;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-top: 18px;
 }
 

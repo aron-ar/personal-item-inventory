@@ -9,8 +9,10 @@ function App() {
   const [isItemFormOpen, setIsItemFormOpen] = useState(false)
   const [editingItemId, setEditingItemId] = useState(null)
   const [viewingItemId, setViewingItemId] = useState(null)
+  const [searchQuery, setSearchQuery] = useState('')
   const [feedback, setFeedback] = useState(null)
   const editingItem = items.find((item) => item.id === editingItemId) ?? null
+  const isFormOpen = isItemFormOpen || editingItem !== null
   const viewedItem =
     viewingItemId === null ? null : getItemById(viewingItemId)
   const summaryCards = [
@@ -54,6 +56,7 @@ function App() {
     }
 
     addItem(fields)
+    setIsItemFormOpen(false)
     showFeedback('Item created successfully')
   }
 
@@ -78,17 +81,20 @@ function App() {
   }
 
   function handleToggleItemForm() {
-    if (viewingItemId !== null) {
-      setViewingItemId(null)
-    }
-
     if (editingItem !== null) {
       setEditingItemId(null)
+      setViewingItemId(null)
       setIsItemFormOpen(true)
       return
     }
 
-    setIsItemFormOpen((isOpen) => !isOpen)
+    if (isItemFormOpen) {
+      setIsItemFormOpen(false)
+      return
+    }
+
+    setViewingItemId(null)
+    setIsItemFormOpen(true)
   }
 
   return (
@@ -151,8 +157,8 @@ function App() {
             <button
               className="add-item-button"
               type="button"
-              aria-expanded={isItemFormOpen || editingItem !== null}
-              aria-controls="item-form"
+              aria-expanded={isFormOpen}
+              aria-controls={isFormOpen ? 'item-form' : undefined}
               onClick={handleToggleItemForm}
             >
               {editingItem !== null
@@ -163,26 +169,26 @@ function App() {
             </button>
           </div>
 
-          {viewingItemId === null && (
+          {viewingItemId === null && !isFormOpen && (
             <div className="toolbar-shell">
               <span className="toolbar-dot" aria-hidden="true" />
               <p>Add the things you own to keep your collection up to date.</p>
             </div>
           )}
 
-          {viewingItemId === null &&
-            (isItemFormOpen || editingItem !== null) && (
-              <div id="item-form">
-                <ItemForm
-                  key={editingItem?.id ?? 'new-item'}
-                  item={editingItem}
-                  onItemSaved={handleSaveItem}
-                  onCancel={() => setEditingItemId(null)}
-                />
-              </div>
-            )}
-
-          {viewingItemId !== null ? (
+          {isFormOpen ? (
+            <div id="item-form">
+              <ItemForm
+                key={editingItem?.id ?? 'new-item'}
+                item={editingItem}
+                onItemSaved={handleSaveItem}
+                onCancel={() => {
+                  setEditingItemId(null)
+                  setIsItemFormOpen(false)
+                }}
+              />
+            </div>
+          ) : viewingItemId !== null ? (
             <ItemDetail
               item={viewedItem}
               itemId={viewingItemId}
@@ -190,7 +196,6 @@ function App() {
               onEdit={() => {
                 setEditingItemId(viewingItemId)
                 setIsItemFormOpen(false)
-                setViewingItemId(null)
               }}
               onDelete={() => {
                 if (viewedItem !== null) {
@@ -201,6 +206,8 @@ function App() {
           ) : (
             <ItemList
               items={items}
+              searchQuery={searchQuery}
+              onSearchQueryChange={setSearchQuery}
               onViewItem={setViewingItemId}
               onEditItem={(id) => {
                 setEditingItemId(id)

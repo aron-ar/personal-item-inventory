@@ -1,8 +1,13 @@
-import { useState } from 'react'
 import ItemCard from './ItemCard.jsx'
 
-function ItemList({ items, onViewItem, onEditItem, onDeleteItem }) {
-  const [searchQuery, setSearchQuery] = useState('')
+function ItemList({
+  items,
+  searchQuery,
+  onSearchQueryChange,
+  onViewItem,
+  onEditItem,
+  onDeleteItem,
+}) {
   const normalizedQuery = searchQuery.trim().toLowerCase()
   const matchingItems = items.filter((item) =>
     item.name.toLowerCase().includes(normalizedQuery),
@@ -12,7 +17,7 @@ function ItemList({ items, onViewItem, onEditItem, onDeleteItem }) {
     <>
       <SearchField
         searchQuery={searchQuery}
-        onSearchQueryChange={setSearchQuery}
+        onSearchQueryChange={onSearchQueryChange}
       />
       {items.length === 0 ? (
         <div className="empty-state">
