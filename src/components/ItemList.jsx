@@ -10,6 +10,8 @@ function ItemList({
   locations,
   selectedLocation,
   onSelectedLocationChange,
+  selectedSortOrder,
+  onSelectedSortOrderChange,
   onViewItem,
   onEditItem,
   onDeleteItem,
@@ -21,6 +23,21 @@ function ItemList({
       (selectedCategory === '' || item.category === selectedCategory) &&
       (selectedLocation === '' || item.location === selectedLocation),
   )
+  const sortedItems = [...matchingItems].sort((firstItem, secondItem) => {
+    switch (selectedSortOrder) {
+      case 'name-desc':
+        return secondItem.name.localeCompare(firstItem.name)
+      case 'category':
+        return firstItem.category.localeCompare(secondItem.category)
+      case 'quantity-asc':
+        return firstItem.quantity - secondItem.quantity
+      case 'quantity-desc':
+        return secondItem.quantity - firstItem.quantity
+      case 'name-asc':
+      default:
+        return firstItem.name.localeCompare(secondItem.name)
+    }
+  })
   const activeFilters = [
     normalizedQuery ? `name “${searchQuery}”` : '',
     selectedCategory ? `category ${selectedCategory}` : '',
@@ -47,6 +64,10 @@ function ItemList({
           selectedLocation={selectedLocation}
           onSelectedLocationChange={onSelectedLocationChange}
         />
+        <SortControl
+          selectedSortOrder={selectedSortOrder}
+          onSelectedSortOrderChange={onSelectedSortOrderChange}
+        />
       </div>
       {items.length === 0 ? (
         <div className="empty-state">
@@ -70,7 +91,7 @@ function ItemList({
         </div>
       ) : (
         <div className="item-list" aria-label="Inventory items">
-          {matchingItems.map((item) => (
+          {sortedItems.map((item) => (
             <ItemCard
               item={item}
               key={item.id}
@@ -155,6 +176,25 @@ function LocationFilter({
             {location}
           </option>
         ))}
+      </select>
+    </div>
+  )
+}
+
+function SortControl({ selectedSortOrder, onSelectedSortOrderChange }) {
+  return (
+    <div className="item-filter-field">
+      <label htmlFor="item-sort-order">Sort by</label>
+      <select
+        id="item-sort-order"
+        value={selectedSortOrder}
+        onChange={(event) => onSelectedSortOrderChange(event.target.value)}
+      >
+        <option value="name-asc">Name (A-Z)</option>
+        <option value="name-desc">Name (Z-A)</option>
+        <option value="category">Category</option>
+        <option value="quantity-asc">Quantity (low to high)</option>
+        <option value="quantity-desc">Quantity (high to low)</option>
       </select>
     </div>
   )

@@ -13,6 +13,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedLocation, setSelectedLocation] = useState('')
+  const [selectedSortOrder, setSelectedSortOrder] = useState('name-asc')
   const [feedback, setFeedback] = useState(null)
   const editingItem = items.find((item) => item.id === editingItemId) ?? null
   const isFormOpen = isItemFormOpen || editingItem !== null
@@ -221,6 +222,8 @@ function App() {
               locations={locations}
               selectedLocation={selectedLocation}
               onSelectedLocationChange={setSelectedLocation}
+              selectedSortOrder={selectedSortOrder}
+              onSelectedSortOrderChange={setSelectedSortOrder}
               onViewItem={setViewingItemId}
               onEditItem={(id) => {
                 setEditingItemId(id)
