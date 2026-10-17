@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import ItemDetail from './components/ItemDetail.jsx'
 import ItemForm from './components/ItemForm.jsx'
 import ItemList from './components/ItemList.jsx'
+import { INVENTORY_CATEGORIES } from './constants/inventory.js'
 import { useInventory } from './hooks/useInventory.js'
 
 function App() {
@@ -10,9 +11,15 @@ function App() {
   const [editingItemId, setEditingItemId] = useState(null)
   const [viewingItemId, setViewingItemId] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const [selectedLocation, setSelectedLocation] = useState('')
   const [feedback, setFeedback] = useState(null)
   const editingItem = items.find((item) => item.id === editingItemId) ?? null
   const isFormOpen = isItemFormOpen || editingItem !== null
+  const locations = [...new Set(items.map((item) => item.location))].sort(
+    (firstLocation, secondLocation) =>
+      firstLocation.localeCompare(secondLocation),
+  )
   const viewedItem =
     viewingItemId === null ? null : getItemById(viewingItemId)
   const summaryCards = [
@@ -208,6 +215,12 @@ function App() {
               items={items}
               searchQuery={searchQuery}
               onSearchQueryChange={setSearchQuery}
+              categories={INVENTORY_CATEGORIES}
+              selectedCategory={selectedCategory}
+              onSelectedCategoryChange={setSelectedCategory}
+              locations={locations}
+              selectedLocation={selectedLocation}
+              onSelectedLocationChange={setSelectedLocation}
               onViewItem={setViewingItemId}
               onEditItem={(id) => {
                 setEditingItemId(id)

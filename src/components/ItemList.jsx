@@ -4,21 +4,50 @@ function ItemList({
   items,
   searchQuery,
   onSearchQueryChange,
+  categories,
+  selectedCategory,
+  onSelectedCategoryChange,
+  locations,
+  selectedLocation,
+  onSelectedLocationChange,
   onViewItem,
   onEditItem,
   onDeleteItem,
 }) {
   const normalizedQuery = searchQuery.trim().toLowerCase()
-  const matchingItems = items.filter((item) =>
-    item.name.toLowerCase().includes(normalizedQuery),
+  const matchingItems = items.filter(
+    (item) =>
+      item.name.toLowerCase().includes(normalizedQuery) &&
+      (selectedCategory === '' || item.category === selectedCategory) &&
+      (selectedLocation === '' || item.location === selectedLocation),
   )
+  const activeFilters = [
+    normalizedQuery ? `name “${searchQuery}”` : '',
+    selectedCategory ? `category ${selectedCategory}` : '',
+    selectedLocation ? `location ${selectedLocation}` : '',
+  ].filter(Boolean)
+  const noResultsMessage = `No items match ${activeFilters.join(
+    ', ',
+  )}. Try different filters or clear them.`
 
   return (
     <>
-      <SearchField
-        searchQuery={searchQuery}
-        onSearchQueryChange={onSearchQueryChange}
-      />
+      <div className="item-filters">
+        <SearchField
+          searchQuery={searchQuery}
+          onSearchQueryChange={onSearchQueryChange}
+        />
+        <CategoryFilter
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onSelectedCategoryChange={onSelectedCategoryChange}
+        />
+        <LocationFilter
+          locations={locations}
+          selectedLocation={selectedLocation}
+          onSelectedLocationChange={onSelectedLocationChange}
+        />
+      </div>
       {items.length === 0 ? (
         <div className="empty-state">
           <div className="empty-illustration" aria-hidden="true">
@@ -37,10 +66,7 @@ function ItemList({
       ) : matchingItems.length === 0 ? (
         <div className="search-empty-state" role="status">
           <h3>No results</h3>
-          <p>
-            No items match “{searchQuery}”. Try a different name or clear the
-            search.
-          </p>
+          <p>{noResultsMessage}</p>
         </div>
       ) : (
         <div className="item-list" aria-label="Inventory items">
@@ -61,7 +87,7 @@ function ItemList({
 
 function SearchField({ searchQuery, onSearchQueryChange }) {
   return (
-    <div className="item-search">
+    <div className="item-filter-field">
       <label htmlFor="item-search-input">Search items</label>
       <div className="item-search-control">
         <input
@@ -82,6 +108,54 @@ function SearchField({ searchQuery, onSearchQueryChange }) {
           </button>
         )}
       </div>
+    </div>
+  )
+}
+
+function CategoryFilter({
+  categories,
+  selectedCategory,
+  onSelectedCategoryChange,
+}) {
+  return (
+    <div className="item-filter-field">
+      <label htmlFor="item-category-filter">Filter by category</label>
+      <select
+        id="item-category-filter"
+        value={selectedCategory}
+        onChange={(event) => onSelectedCategoryChange(event.target.value)}
+      >
+        <option value="">All categories</option>
+        {categories.map((category) => (
+          <option key={category} value={category}>
+            {category}
+          </option>
+        ))}
+      </select>
+    </div>
+  )
+}
+
+function LocationFilter({
+  locations,
+  selectedLocation,
+  onSelectedLocationChange,
+}) {
+  return (
+    <div className="item-filter-field">
+      <label htmlFor="item-location-filter">Filter by location</label>
+      <select
+        id="item-location-filter"
+        value={selectedLocation}
+        onChange={(event) => onSelectedLocationChange(event.target.value)}
+      >
+        <option value="">All locations</option>
+        {locations.map((location) => (
+          <option key={location} value={location}>
+            {location}
+          </option>
+        ))}
+      </select>
     </div>
   )
 }
