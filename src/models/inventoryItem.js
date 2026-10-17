@@ -21,5 +21,9 @@ export function getItemValidationError(item) {
     return 'Item quantity must be an integer greater than or equal to 1.'
   }
 
+  if (item.notes !== undefined && typeof item.notes !== 'string') {
+    return 'Item notes must be a string.'
+  }
+
   return null
 }

@@ -51,6 +51,12 @@ function ItemDetail({ item, itemId, onBack, onEdit, onDelete }) {
           <dt>ID</dt>
           <dd>{item.id}</dd>
         </div>
+        {typeof item.notes === 'string' && item.notes.trim() !== '' && (
+          <div className="item-detail-notes">
+            <dt>Notes</dt>
+            <dd>{item.notes}</dd>
+          </div>
+        )}
       </dl>
 
       <div className="item-detail-actions">

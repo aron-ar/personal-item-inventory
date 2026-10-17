@@ -295,7 +295,8 @@ a {
 }
 
 .form-field input,
-.form-field select {
+.form-field select,
+.form-field textarea {
   width: 100%;
   min-height: 39px;
   padding: 8px 10px;
@@ -307,9 +308,24 @@ a {
   font-size: 12px;
 }
 
+.form-field textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
 .form-field input[aria-invalid='true'],
-.form-field select[aria-invalid='true'] {
+.form-field select[aria-invalid='true'],
+.form-field textarea[aria-invalid='true'] {
   border-color: #b44a43;
+}
+
+.form-field textarea:focus-visible {
+  outline: 2px solid #82a48a;
+  outline-offset: 2px;
+}
+
+.item-notes-field {
+  grid-column: 1 / -1;
 }
 
 .form-error,
@@ -657,6 +673,14 @@ a {
   color: #526057;
   font-size: 13px;
   font-weight: 500;
+}
+
+.item-detail-notes {
+  grid-column: 1 / -1;
+}
+
+.item-detail-notes dd {
+  white-space: pre-wrap;
 }
 
 .item-detail-actions {

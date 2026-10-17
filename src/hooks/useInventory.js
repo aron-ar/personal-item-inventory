@@ -44,6 +44,7 @@ export function useInventory() {
         category: itemFields.category,
         location: itemFields.location.trim(),
         quantity: itemFields.quantity,
+        notes: itemFields.notes?.trim() ?? '',
       }
       const updatedItems = [...items, newItem]
 
@@ -68,6 +69,7 @@ export function useInventory() {
         category: itemFields.category ?? existingItem.category,
         location: itemFields.location ?? existingItem.location,
         quantity: itemFields.quantity ?? existingItem.quantity,
+        notes: itemFields.notes?.trim() ?? existingItem.notes ?? '',
       }
       validateItemFields(updatedItem)
 

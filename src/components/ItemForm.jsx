@@ -6,6 +6,7 @@ const INITIAL_FIELDS = {
   category: '',
   location: '',
   quantity: '1',
+  notes: '',
 }
 
 function validateFields(fields) {
@@ -39,6 +40,7 @@ function ItemForm({ item = null, onItemSaved, onCancel }) {
           category: item.category,
           location: item.location,
           quantity: String(item.quantity),
+          notes: item.notes ?? '',
         }
       : INITIAL_FIELDS,
   )
@@ -69,6 +71,7 @@ function ItemForm({ item = null, onItemSaved, onCancel }) {
         name: fields.name.trim(),
         location: fields.location.trim(),
         quantity: Number(fields.quantity),
+        notes: fields.notes.trim(),
       })
       if (item === null) {
         setFields(INITIAL_FIELDS)
@@ -177,6 +180,17 @@ function ItemForm({ item = null, onItemSaved, onCancel }) {
               {errors.quantity}
             </span>
           )}
+        </div>
+
+        <div className="form-field item-notes-field">
+          <label htmlFor="item-notes">Notes (optional)</label>
+          <textarea
+            id="item-notes"
+            name="notes"
+            value={fields.notes}
+            onChange={handleChange}
+            rows="4"
+          />
         </div>
       </div>
 
