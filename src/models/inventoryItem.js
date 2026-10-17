@@ -9,8 +9,18 @@ export function getItemValidationError(item) {
     return 'Item name cannot be empty.'
   }
 
-  if (typeof item.location !== 'string' || item.location.trim().length === 0) {
-    return 'Item location cannot be empty.'
+  if (
+    typeof item.locationParent !== 'string' ||
+    item.locationParent.trim().length === 0
+  ) {
+    return 'Parent location cannot be empty.'
+  }
+
+  if (
+    item.locationChild !== undefined &&
+    typeof item.locationChild !== 'string'
+  ) {
+    return 'Child location must be a string.'
   }
 
   if (!INVENTORY_CATEGORIES.includes(item.category)) {

@@ -4,6 +4,7 @@ import ItemForm from './components/ItemForm.jsx'
 import ItemList from './components/ItemList.jsx'
 import { INVENTORY_CATEGORIES } from './constants/inventory.js'
 import { useInventory } from './hooks/useInventory.js'
+import { getLocationFilterOptions } from './models/location.js'
 
 function App() {
   const { items, addItem, updateItem, deleteItem, getItemById } = useInventory()
@@ -17,10 +18,7 @@ function App() {
   const [feedback, setFeedback] = useState(null)
   const editingItem = items.find((item) => item.id === editingItemId) ?? null
   const isFormOpen = isItemFormOpen || editingItem !== null
-  const locations = [...new Set(items.map((item) => item.location))].sort(
-    (firstLocation, secondLocation) =>
-      firstLocation.localeCompare(secondLocation),
-  )
+  const locations = getLocationFilterOptions(items)
   const viewedItem =
     viewingItemId === null ? null : getItemById(viewingItemId)
   const summaryCards = [

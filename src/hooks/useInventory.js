@@ -42,7 +42,8 @@ export function useInventory() {
         id: createItemId(items),
         name: itemFields.name.trim(),
         category: itemFields.category,
-        location: itemFields.location.trim(),
+        locationParent: itemFields.locationParent.trim(),
+        locationChild: itemFields.locationChild?.trim() ?? '',
         quantity: itemFields.quantity,
         notes: itemFields.notes?.trim() ?? '',
       }
@@ -67,7 +68,10 @@ export function useInventory() {
         id: existingItem.id,
         name: itemFields.name ?? existingItem.name,
         category: itemFields.category ?? existingItem.category,
-        location: itemFields.location ?? existingItem.location,
+        locationParent:
+          itemFields.locationParent ?? existingItem.locationParent,
+        locationChild:
+          itemFields.locationChild ?? existingItem.locationChild ?? '',
         quantity: itemFields.quantity ?? existingItem.quantity,
         notes: itemFields.notes?.trim() ?? existingItem.notes ?? '',
       }

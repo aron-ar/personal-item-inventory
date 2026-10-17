@@ -1,3 +1,5 @@
+import { formatLocation } from '../models/location.js'
+
 function ItemDetail({ item, itemId, onBack, onEdit, onDelete }) {
   if (item === null) {
     return (
@@ -41,7 +43,9 @@ function ItemDetail({ item, itemId, onBack, onEdit, onDelete }) {
         </div>
         <div>
           <dt>Location</dt>
-          <dd>{item.location}</dd>
+          <dd>
+            {formatLocation(item.locationParent, item.locationChild ?? '')}
+          </dd>
         </div>
         <div>
           <dt>Quantity</dt>

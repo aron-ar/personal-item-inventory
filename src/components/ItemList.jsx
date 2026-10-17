@@ -1,4 +1,5 @@
 import ItemCard from './ItemCard.jsx'
+import { locationMatchesFilter } from '../models/location.js'
 
 function ItemList({
   items,
@@ -21,7 +22,7 @@ function ItemList({
     (item) =>
       item.name.toLowerCase().includes(normalizedQuery) &&
       (selectedCategory === '' || item.category === selectedCategory) &&
-      (selectedLocation === '' || item.location === selectedLocation),
+      locationMatchesFilter(item, selectedLocation),
   )
   const sortedItems = [...matchingItems].sort((firstItem, secondItem) => {
     switch (selectedSortOrder) {

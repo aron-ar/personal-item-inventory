@@ -4,7 +4,8 @@ import { INVENTORY_CATEGORIES } from '../constants/inventory.js'
 const INITIAL_FIELDS = {
   name: '',
   category: '',
-  location: '',
+  locationParent: '',
+  locationChild: '',
   quantity: '1',
   notes: '',
 }
@@ -20,8 +21,8 @@ function validateFields(fields) {
     errors.category = 'Select a category.'
   }
 
-  if (fields.location.trim().length === 0) {
-    errors.location = 'Enter a location.'
+  if (fields.locationParent.trim().length === 0) {
+    errors.locationParent = 'Enter a parent location.'
   }
 
   const quantity = Number(fields.quantity)
@@ -38,7 +39,8 @@ function ItemForm({ item = null, onItemSaved, onCancel }) {
       ? {
           name: item.name,
           category: item.category,
-          location: item.location,
+          locationParent: item.locationParent,
+          locationChild: item.locationChild ?? '',
           quantity: String(item.quantity),
           notes: item.notes ?? '',
         }
@@ -69,7 +71,8 @@ function ItemForm({ item = null, onItemSaved, onCancel }) {
       onItemSaved({
         ...fields,
         name: fields.name.trim(),
-        location: fields.location.trim(),
+        locationParent: fields.locationParent.trim(),
+        locationChild: fields.locationChild.trim(),
         quantity: Number(fields.quantity),
         notes: fields.notes.trim(),
       })
@@ -139,24 +142,38 @@ function ItemForm({ item = null, onItemSaved, onCancel }) {
         </div>
 
         <div className="form-field">
-          <label htmlFor="item-location">Location</label>
+          <label htmlFor="item-location-parent">Parent location</label>
           <input
-            id="item-location"
-            name="location"
+            id="item-location-parent"
+            name="locationParent"
             type="text"
-            value={fields.location}
+            value={fields.locationParent}
             onChange={handleChange}
-            aria-invalid={Boolean(errors.location)}
+            aria-invalid={Boolean(errors.locationParent)}
             aria-describedby={
-              errors.location ? 'item-location-error' : undefined
+              errors.locationParent
+                ? 'item-location-parent-error'
+                : undefined
             }
             required
           />
-          {errors.location && (
-            <span className="form-error" id="item-location-error">
-              {errors.location}
+          {errors.locationParent && (
+            <span className="form-error" id="item-location-parent-error">
+              {errors.locationParent}
             </span>
           )}
+        </div>
+
+        <div className="form-field">
+          <label htmlFor="item-location-child">Child location (optional)</label>
+          <input
+            id="item-location-child"
+            name="locationChild"
+            type="text"
+            value={fields.locationChild}
+            onChange={handleChange}
+            placeholder="e.g., Garage"
+          />
         </div>
 
         <div className="form-field">
